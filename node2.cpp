@@ -125,9 +125,6 @@ void DeleteNode(PtrNode& pHead, PtrNode p) {
     }
 }
 
-
-
-
 void insertNodeAtPosition(PtrNode& pHead, int x, int position) {
     if (position == 0 || isEmpty(pHead)) {
         PtrNode pNew = createNode(x);
@@ -185,9 +182,22 @@ int main() {
         DeleteNode(pHead, nodeToDelete);
         cout << "Danh sach lien ket sau khi xoa: ";
         // Gọi hàm output để in ra danh sách sau khi xóa
+        output(pHead);
     } else {
         cout << "Khong tim thay node can xoa." << endl;
     }
+
+    int x,position;
+    cout << "\nNhap gia tri can chen: ";
+    cin >> x;
+    cout << "Nhap vi tri can chen (tu 0 tro len): ";
+    cin >> position;
+
+    insertNodeAtPosition(pHead, x, position);
+
+    cout << "Danh sach lien ket sau khi chen: ";
+    output(pHead);
+
     // Sắp xếp
     Sort(pHead);
     cout << "Danh sach lien ket sau khi sap xep: ";
