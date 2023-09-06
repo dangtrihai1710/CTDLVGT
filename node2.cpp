@@ -17,9 +17,7 @@ bool isEmpty(PtrNode pHead) {
 }
 
 PtrNode createNode(int x) {
-    PtrNode p;
-    p = new Node;
-
+    PtrNode p = new Node;
     p->info = x;
     p->pNext = NULL;
     return p;
@@ -27,42 +25,41 @@ PtrNode createNode(int x) {
 
 PtrNode nodeLast(PtrNode pHead) {
     PtrNode p = pHead;
-    while(p->pNext != NULL) {
+    while (p != NULL && p->pNext != NULL) {
         p = p->pNext;
     }
     return p;
 }
 
 void insertLast(PtrNode& pHead, PtrNode pNew) {
-    if (isEmpty(pHead))
+    if (isEmpty(pHead)) {
         pHead = pNew;
-    else {
-        PtrNode p =nodeLast(pHead);
+    } else {
+        PtrNode p = nodeLast(pHead);
         p->pNext = pNew;
     }
 }
 
 void insertFirst(PtrNode& pHead, PtrNode pNew) {
-    if (isEmpty(pHead))
+    if (isEmpty(pHead)) {
         pHead = pNew;
-    else {
+    } else {
         pNew->pNext = pHead;
         pHead = pNew;
     }
 }
 
-PtrNode input(PtrNode& pHead) {
+void input(PtrNode& pHead) {
     int x;
     init(pHead);
     do {
-        cout << "Nhap gia tri (Nhap 0 ket thuc): ";
+        cout << "Nhap gia tri (Nhap 0 de ket thuc): ";
         cin >> x;
         if (x == 0)
             break;
         PtrNode pNew = createNode(x);
         insertFirst(pHead, pNew);
     } while (true);
-    return pHead;
 }
 
 void output(PtrNode pHead) {
@@ -73,26 +70,67 @@ void output(PtrNode pHead) {
     }
     cout << "[NULL]\n";
 }
-
-void removeP(PtrNode& pHead, PtrNode p) {
-    PtrNode prevNode = pHead;
-    if (pHead == NULL || p == NULL) {
-        return;
-    }
-
-    if (pHead == p && p->pNext == NULL) {
-        delete p;
-        pHead = NULL;
-        return;
-    }
-
-    // if()
-
+void hoanVi(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
 }
 
-void insertNodeAtPosition(PtrNode &pHead, int x, int position) {
-    PtrNode pNew = createNode(x); 
-    if (position == 0) {
+PtrNode searchX(PtrNode pHead, int x) {
+    PtrNode p = pHead;
+    while(p->info != x && p!=NULL)  p = p->pNext;
+    return p;
+}
+
+void DeleteNode(PtrNode& pHead, PtrNode p) {
+    if (!pHead || !p) {
+        return;
+    }
+
+    // Bước 1: Nếu danh sách chỉ có 1 phần tử và đó là nút cần xóa (p == pHead)
+    if (pHead == p) {
+        pHead = nullptr;
+        delete p;
+        return;
+    }
+
+    PtrNode pTruoc = NULL;
+    PtrNode current = pHead;
+
+    while (current->pNext != NULL) {
+        pTruoc = current;
+        current = current->pNext;
+    }
+
+    // Kiểm tra nếu p là nút cuối cùng
+    if (current == p) {
+        delete p;
+        pTruoc->pNext = NULL;
+        return; // Kết thúc khi đã xóa nút cuối cùng
+    }
+
+    // Bước 3: Đặt pSau1 là nút kế tiếp của p
+    PtrNode pSau1 = p->pNext;
+    if (pSau1) {
+        PtrNode pSau2 = pSau1->pNext;
+
+        // Bước 4: Hoán đổi dữ liệu giữa p và pSau1
+        hoanVi(p->info, pSau1->info);
+
+        // Bước 5: Cập nhật con trỏ Next của p
+        p->pNext = pSau2;
+
+        // Bước 6: Xóa nút pSau1
+        delete pSau1;
+    }
+}
+
+
+
+
+void insertNodeAtPosition(PtrNode& pHead, int x, int position) {
+    if (position == 0 || isEmpty(pHead)) {
+        PtrNode pNew = createNode(x);
         pNew->pNext = pHead;
         pHead = pNew;
     } else {
@@ -105,77 +143,53 @@ void insertNodeAtPosition(PtrNode &pHead, int x, int position) {
             pCurrent = pCurrent->pNext;
             currentPosition++;
         }
+
+        PtrNode pNew = createNode(x);
         pPrev->pNext = pNew;
         pNew->pNext = pCurrent;
     }
 }
 
-int searchX(PtrNode pHead, int x) {
-    PtrNode p = pHead;
-    int i = 0;
-    while (p != NULL && p->info != x) {
+PtrNode Min(PtrNode pHead) {
+    PtrNode nodeMin = pHead;
+    PtrNode p = pHead->pNext;
+    while (p != NULL) {
+        if (nodeMin->info > p->info) 
+            nodeMin = p;       
         p = p->pNext;
-        i++;
     }
-    if (p == NULL) {
-        return -1; 
-    }
-    return i;
+    return nodeMin;
 }
 
-void sort(PtrNode &pHead) {
-    PtrNode p, q, pmin;
-    int min;
-    for (p = pHead; p->pNext != NULL; p = p->pNext) {
-        min = p->info;
-        pmin = p;
-        for (q = p->pNext; q != NULL; q = q->pNext) {
-            if (q->info < min) {
-                min = q->info;
-                pmin = q;
-            }
-        }
-        pmin->info = p->info;
-        p->info = min;
+void Sort(PtrNode pHead) {
+    PtrNode p = pHead;
+    while (p != NULL) {
+        PtrNode pMin = Min(p);
+        hoanVi(p->info, pMin->info);
+        p = p->pNext;
     }
 }
-
-
-
-
 
 int main() {
     PtrNode pHead = NULL;
+
     input(pHead);
-    
+
     cout << "Danh sach lien ket truoc khi sap xep: ";
     output(pHead);
 
-    int x, position;
-
-    cout << "\nNhap gia tri can chen: ";
-    cin >> x;
-    cout << "Nhap vi tri can chen (tu 0 tro len): ";
-    cin >> position;
-
-
-    insertNodeAtPosition(pHead, x, position);
-
-    cout << "Danh sach lien ket sau khi chen: ";
-    output(pHead);
-
-    cout << "\nNhap gia tri x can tim kiem: ";
-    cin >> x;
-    
-    position = searchX(pHead, x);
-    if (position == -1) {
-        cout << "Khong tim thay gia tri " << x << " trong danh sach.\n";
+    int valueToDelete = 3;
+    PtrNode nodeToDelete = searchX(pHead, valueToDelete); // 
+    if (nodeToDelete != NULL) {
+        // Gọi hàm DeleteNode để xóa nút
+        DeleteNode(pHead, nodeToDelete);
+        cout << "Danh sach lien ket sau khi xoa: ";
+        // Gọi hàm output để in ra danh sách sau khi xóa
     } else {
-        cout << "3. Vi tri Node co gia tri x: " << position << endl;
+        cout << "Khong tim thay node can xoa." << endl;
     }
-
     // Sắp xếp
-    sort(pHead);
+    Sort(pHead);
     cout << "Danh sach lien ket sau khi sap xep: ";
     output(pHead);
 
@@ -188,4 +202,3 @@ int main() {
 
     return 0;
 }
-
