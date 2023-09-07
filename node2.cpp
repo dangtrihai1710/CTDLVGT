@@ -89,7 +89,7 @@ void DeleteNode(PtrNode& pHead, PtrNode p) {
 
     // Bước 1: Nếu danh sách chỉ có 1 phần tử và đó là nút cần xóa (p == pHead)
     if (pHead == p) {
-        pHead = nullptr;
+        pHead = NULL;
         delete p;
         return;
     }
