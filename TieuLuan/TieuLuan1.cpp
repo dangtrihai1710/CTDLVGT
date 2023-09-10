@@ -19,7 +19,7 @@ typedef struct SinhVien {
     char gioiTinh;
     float diemtoan;
     float diemly;
-    float diemtin;
+    float diemanh;
     char tennganh[MAX];
     struct Date ng;
 }SV;
@@ -52,8 +52,8 @@ void nhapSV(SV &x) {
     cin >> x.diemtoan;
     cout << "\n\tNhap diem ly: ";
     cin >> x.diemly;
-    cout << "\n\tNhap diem tin: ";
-    cin >> x.diemtin;
+    cout << "\n\tNhap diem anh: ";
+    cin >> x.diemanh;
     cout << "\n\tNhap ngay thang nam sinh: ";
     nhapNgaySinh(x.ng);
     fflush(stdin);
@@ -70,7 +70,7 @@ void xuatSV(SV x) {
     cout << " Ten nganh:" << x.tennganh ;
     cout << " Diem toan:" << x.diemtoan ;
     cout << " Diem ly:" << x.diemly ;
-    cout << " Diem tin:" << x.diemtin ;
+    cout << " Diem tin:" << x.diemanh ;
     xuatNgaySinh(x.ng);
     cout << " Gioi tinh:" << x.gioiTinh ;
 }
