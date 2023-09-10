@@ -72,22 +72,22 @@ int CopyStack(PtrNode s, PtrNode &dest) {
 
 
 int main() {
-    PtrNode sourceStack = nullptr; // Khởi tạo stack nguồn
+    PtrNode sourceStack = NULL; // Khởi tạo stack nguồn
     Push(sourceStack, 1);
     Push(sourceStack, 2);
     Push(sourceStack, 3);
 
-    PtrNode destinationStack = nullptr; // Khởi tạo stack đích
+    PtrNode destinationStack = NULL; // Khởi tạo stack đích
 
     if (CopyStack(sourceStack, destinationStack)) {
         // In ra các phần tử từ stack đích (destinationStack)
         PtrNode temp = destinationStack;
-        while (temp != nullptr) {
+        while (temp != NULL) {
             cout << temp->info << " ";
             temp = temp->pNext;
         }
         // Giải phóng bộ nhớ của stack đích nếu cần
-        while (destinationStack != nullptr) {
+        while (destinationStack != NULL) {
             PtrNode temp = destinationStack;
             destinationStack = destinationStack->pNext;
             delete temp;
