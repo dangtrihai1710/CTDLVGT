@@ -1,9 +1,6 @@
 #include <iostream>
 #include <string>
-
 using namespace std;
-
-// Hàm kiểm tra xem một ký tự có phải là toán tử hay không
 bool isOperator(char c) {
     return (c == '+' || c == '-' || c == '*' || c == '/');
 }
