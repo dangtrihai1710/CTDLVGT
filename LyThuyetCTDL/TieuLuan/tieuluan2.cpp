@@ -2,13 +2,13 @@
 #include <cstring>
 #define MAX 100
 using namespace std;
-
+// Định nghĩa ngày tháng năm
 typedef struct Date {
     int ngay;
     int thang;
     int nam;
 } Date;
-
+//  Định nghĩa SV
 typedef struct SinhVien {
     char ma[MAX];
     char ten[MAX];
@@ -20,6 +20,7 @@ typedef struct SinhVien {
     Date ng;
 } SV;
 
+// Định nghĩa dslk
 typedef struct tagNode {
     SV info;
     struct tagNode* pNext;
@@ -27,14 +28,17 @@ typedef struct tagNode {
 
 typedef Node* PtrNode;
 
+// Hàm khởi tạo pHead
 void init(PtrNode &pHead) {
     pHead = NULL;
 }
 
+// Hàm kiểm tra rỗng
 bool isEmpty(PtrNode pHead) {
     return pHead == NULL;
 }
 
+// Hàm nhập ngày sinh
 void nhapNgaySinh(Date &d) {
     cout << "\n\tNhap ngay: ";
     cin >> d.ngay;
@@ -44,10 +48,12 @@ void nhapNgaySinh(Date &d) {
     cin >> d.nam;
 }
 
+// Hàm xuất ngày sinh
 void xuatNgaySinh(Date d) {
     cout << d.ngay << "/" << d.thang << "/" << d.nam;
 }
 
+// Hàm nhập 1 SV
 void nhapSV(SV &x) {
     cout << "\n\tNhap ma: ";
     cin >> x.ma;
@@ -69,6 +75,7 @@ void nhapSV(SV &x) {
     } while (x.gioiTinh != 'x' && x.gioiTinh != 'y');
 }
 
+// Hàm xuất 1 SV
 void xuatSV(SV x) {
     cout << "\n\tMa:" << x.ma;
     cout << " Ten:" << x.ten;
@@ -81,6 +88,7 @@ void xuatSV(SV x) {
     cout << " Gioi tinh:" << x.gioiTinh;
 }
 
+// Hàm tạo node
 PtrNode createNode(SV x) {
     PtrNode p = new Node;
     p->info = x;
@@ -88,6 +96,7 @@ PtrNode createNode(SV x) {
     return p;
 }
 
+// Hàm thêm phần tử vào đầu danh sách
 void insertFirst(PtrNode &pHead, PtrNode pNew) {
     if (isEmpty(pHead)) {
         pHead = pNew;
@@ -98,6 +107,7 @@ void insertFirst(PtrNode &pHead, PtrNode pNew) {
     }
 }
 
+// Hàm nhập danh sách sinh viên
 void nhapDanhSachSinhVien(PtrNode &pHead) {
     int soLuong;
     cout << "\n\tNhap so luong sinh vien: ";
@@ -112,6 +122,7 @@ void nhapDanhSachSinhVien(PtrNode &pHead) {
     }
 }
 
+// Hàm xuất danh sách sinh viên
 void xuatDanhSachSinhVien(PtrNode pHead) {
     PtrNode current = pHead;
     int i = 1;
