@@ -78,7 +78,7 @@ void xuatSV(SV x) {
 // Hàm nhập danh sách sinh viên
 void nhapDSSV(SV a[],int &n) {
     do {
-        cout << "\n\tNhap so phan tu mang (0<n<=100): ";
+        cout << "\n\tNhap so luong sinh vien (0<n<=100): ";
         cin >> n;
         if(0 >= n || n >= MAX)
             cout << "\n\tSo luong sinh vien khong hop le";
@@ -192,6 +192,29 @@ void SapXepDiemToan(SV a[], int n) {
                 HoanVi(a[i].diemtoan,a[j].diemtoan);
 }
 
+// Hàm xóa sinh viên theo mã sinh viên
+void xoaSinhVienTheoMa(SV a[], int &n, char maSV[MAX]) {
+    int i, j;
+    bool found = false;
+
+    for (i = 0; i < n; i++) {
+        if (strcmp(a[i].ma, maSV) == 0) {
+            found = true;
+            // Dịch chuyển các sinh viên phía sau lên trước để ghi đè sinh viên bị xóa
+            for (j = i; j < n - 1; j++) {
+                a[j] = a[j + 1];
+            }
+            n--; // Giảm số lượng sinh viên đi 1
+            cout << "\n\tDa xoa sinh vien co ma " << maSV << endl;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "\n\tKhong tim thay sinh vien co ma " << maSV << endl;
+    }
+}
+
 
 // Hàm MENU lựa chọn
 void MeNu(int &chon) {
@@ -205,6 +228,7 @@ void MeNu(int &chon) {
     cout << "\n\t6. Tim thong tin sinh vien theo ten";
     cout << "\n\t7. Xuat danh sach sinh vien theo ten nganh";
     cout << "\n\t8. Xuat danh sach sinh vien theo diem toan tang dan";
+    cout << "\n\t9. Xoa sinh vien theo ma sinh vien";
     cout << "\n\t0. Thoat";
     cout << "\n\tChon chuc nang: ";
     cin >> chon;
@@ -243,7 +267,13 @@ int main() {
                 break;
             case 8:
                 SapXepDiemToan(a,n);
-                break;            
+                break;    
+            case 9:
+                cout << "\n\tNhap ma sinh vien can xoa: ";
+                cin.ignore();
+                cin.getline(maSV, MAX);
+                xoaSinhVienTheoMa(a, n, maSV);
+                break;
             case 0:
                 cout << "Ket thuc chuong trinh." << endl;
                 break;

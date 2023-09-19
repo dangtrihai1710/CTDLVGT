@@ -12,20 +12,18 @@ struct Date {
 };
 
 
-// Định nghĩa kiểu dữ liệu cấu trúc sinh viên
-typedef struct SinhVien {
+// Định nghĩa kiểu dữ liệu cấu trúc truyện
+typedef struct QuyenTruyen {
     char ma[MAXSTACK];
-    char ten[MAXSTACK];
-    char gioiTinh;
-    float diemtoan;
-    float diemly;
-    float diemanh;
-    char tennganh[MAXSTACK];
-    struct Date ng;
-}SV;
+    char tentruyen[MAXSTACK];
+    char tacgia[MAXSTACK];
+    char theloai[MAXSTACK];
+    float giatruyen;
+    struct Date ngaynhap;
+}Truyen;
 
-// Nhập ngày sinh cho sinh viên
-void nhapNgaySinh(Date &d) {
+// Nhập ngày nhập truyện
+void nhapNgayNhapTruyen(Date &d) {
     cout << "\n\tNhap ngay: ";
     cin >> d.ngay;
     cout << "\n\tNhap thang: ";
@@ -34,49 +32,15 @@ void nhapNgaySinh(Date &d) {
     cin >> d.nam;
 }
 
-// Xuất ngày sinh cho sinh viên
-void xuatNgaySinh(Date d) {
+// Xuất ngày nhập truyện 
+void xuatNgayNhapTruyen(Date d) {
     cout << ""<<d.ngay<<"/"<<d.thang<<"/"<<d.nam<<"";
 }
 
-//Hàm nhập 1 sinh viên
-void nhapSV(SV &x) {
-    cout << "\n\tNhap ma: ";
-    fflush(stdin);
-    gets(x.ma);
-    cout << "\n\tNhap ten: ";
-    gets(x.ten);
-    cout << "\n\tNhap ten nganh hoc: (VD:CNTT)";
-    gets(x.tennganh);
-    cout << "\n\tNhap diem toan: ";
-    cin >> x.diemtoan;
-    cout << "\n\tNhap diem ly: ";
-    cin >> x.diemly;
-    cout << "\n\tNhap diem anh: ";
-    cin >> x.diemanh;
-    cout << "\n\tNhap ngay thang nam sinh: ";
-    nhapNgaySinh(x.ng);
-    fflush(stdin);
-    do {
-        cout << "\n\tNhap gioi tinh(x-nu,y-nam): ";
-        x.gioiTinh = getche();
-    }while(x.gioiTinh != 'x' && x.gioiTinh != 'y');
-}
 
-// Hàm xuất 1 sinh viên
-void xuatSV(SV x) {
-    cout << "\n\tMa:" << x.ma ;
-    cout << " Ten:" << x.ten ;
-    cout << " Ten nganh:" << x.tennganh ;
-    cout << " Diem toan:" << x.diemtoan ;
-    cout << " Diem ly:" << x.diemly ;
-    cout << " Diem tin:" << x.diemanh ;
-    xuatNgaySinh(x.ng);
-    cout << " Gioi tinh:" << x.gioiTinh ;
-}
 struct Stack {
     int top;
-    SV nodes[MAXSTACK];
+    Truyen nodes[MAXSTACK];
 };
 
 void Init(Stack &s) {
@@ -91,161 +55,213 @@ bool IsFull(Stack s) {
     return (s.top == MAXSTACK - 1);
 }
 
-
-// Hàm MENU lựa chọn
-void MeNu(int &chon) {
-    cout << "\n\tCHUONG TRINH QUAN LY SINH VIEN BANG C/C++";
-    cout << "\n\t******------------MENU-------------******";
-    cout << "\n\t1. Nhap danh sach sinh vien";
-    cout << "\n\t2. Xuat danh sach sinh vien";
-    cout << "\n\t3. Tim thong tin sinh vien theo MSSV";
-    cout << "\n\t4. Xuat danh sach sinh vien CNTT";
-    cout << "\n\t5. Xuat danh sach sinh vien nu CNTT";
-    cout << "\n\t6. Tim thong tin sinh vien theo ten";
-    cout << "\n\t7. Xuat danh sach sinh vien theo ten nganh";
-    cout << "\n\t8. Xuat danh sach sinh vien theo diem toan tang dan";
-    cout << "\n\t0. Thoat";
-    cout << "\n\tChon chuc nang: ";
-    cin >> chon;
+// Hàm nhập thông tin cho một quyển truyện
+void nhapTruyen(Truyen &x) {
+    cout << "\n\tNhap ma so quyen truyen: ";
+    cin.ignore(); // Loại bỏ ký tự Enter còn lại trong bộ đệm
+    cin.getline(x.ma, sizeof(x.ma));
+    
+    cout << "\n\tNhap ten quyen truyen: ";
+    cin.getline(x.tentruyen, sizeof(x.tentruyen));
+    
+    cout << "\n\tNhap tac gia: ";
+    cin.getline(x.tacgia, sizeof(x.tacgia));
+    
+    cout << "\n\tNhap the loai: ";
+    cin.getline(x.theloai, sizeof(x.theloai));
+    
+    cout << "\n\tNhap gia quyen truyen: ";
+    cin >> x.giatruyen;
+    
+    cout << "\n\tNhap ngay nhap: ";
+    nhapNgayNhapTruyen(x.ngaynhap);
 }
 
-// Hàm nhập danh sách sinh viên
-void nhapDanhSachSinhVien(Stack &s, int &n) {
-    cout << "\n\tNhap so luong sinh vien: ";
-    cin >> n;
+// Hàm xuất thông tin cho một quyển truyện
+void xuatTruyen(Truyen x) {
+    cout << "\n\tMa so quyen truyen: " << x.ma;
+    cout << "\n\tTen quyen truyen: " << x.tentruyen;
+    cout << "\n\tTac gia: " << x.tacgia;
+    cout << "\n\tThe loai: " << x.theloai;
+    cout << "\n\tGia quyen truyen: " << x.giatruyen;
+    cout << "\n\tNgay nhap: ";
+    xuatNgayNhapTruyen(x.ngaynhap);
+    cout << endl;
+}
+
+
+
+// Hàm nhập danh sách truyện
+void nhapDanhSachTruyen(Stack &s, int &n) {
+    do {
+        cout << "\n\tNhap so luong truyen (0<n<=100): ";
+        cin >> n;
+        if(0 >= n || n >= MAXSTACK)
+            cout << "\n\tSo luong truyen khong hop le";
+    } while (0 >= n || n >= MAXSTACK);
     for (int i = 0; i < n; i++) {
-        cout << "\n\tNhap thong tin cho sinh vien thu " << i + 1 << ":";
-        nhapSV(s.nodes[++s.top]);
+        cout << "\n\tNhap thong tin cho quyen truyen thu " << i + 1 << ":";
+        nhapTruyen(s.nodes[++s.top]);
     }
 }
 
-// Hàm xuất danh sách sinh viên
-void xuatDanhSachSinhVien(Stack s, int n) {
+// Hàm xuất danh sách truyện
+void xuatDanhSachTruyen(Stack s, int n) {
     for (int i = 0; i < n; i++) {
-        xuatSV(s.nodes[i]);
+        xuatTruyen(s.nodes[i]);
     }
 }
 
-// Hàm tìm sinh viên theo MSSV
-void timSinhVienTheoMSSV(Stack s, int n, char mssv[MAXSTACK]) {
+// Hàm tìm truyện theo Mã
+void timTruyenTheoMa(Stack s, int n, char mssv[MAXSTACK]) {
     for (int i = 0; i < n; i++) {
         if (strcmp(s.nodes[i].ma, mssv) == 0) {
-            cout << "\nThong tin sinh vien co MSSV " << mssv << ":";
-            xuatSV(s.nodes[i]);
+            cout << "\nThong tin truyen co ma truyen la " << mssv << ":";
+            xuatTruyen(s.nodes[i]);
             return;
         }
     }
-    cout << "\nKhong tim thay sinh vien co MSSV " << mssv;
+    cout << "\nKhong tim thay truyen co ma nay " << mssv;
 }
 
-// Hàm xuat danh sach sinh vien CNTT
-void xuatDanhSachSinhVienCNTT(Stack s, int n) {
-    cout << "\nDanh sach sinh vien CNTT:";
+// Hàm xuat danh sach truyện thể loại kinh dị
+void xuatDanhSachTruyenKinhDi(Stack s, int n) {
+    cout << "\nDanh sach truyen kinh di:";
     for (int i = 0; i < n; i++) {
-        if (strcmp(s.nodes[i].tennganh, "CNTT") == 0) {
-            xuatSV(s.nodes[i]);
+        if (strcmp(s.nodes[i].theloai, "kinh di") == 0) {
+            xuatTruyen(s.nodes[i]);
         }
     }
 }
 
-// Hàm xuat danh sach sinh vien nu CNTT
-void xuatDanhSachSinhVienNuCNTT(Stack s, int n) {
-    cout << "\nDanh sach sinh vien nu CNTT:";
+// Hàm xuất danh sách truyện giá dưới 50.000 VND thể loại kinh dị
+void XuatTruyen5(Stack s, int n) {
+    cout << "\nDanh sach truyen the loai kinh di:";
     for (int i = 0; i < n; i++) {
-        if (strcmp(s.nodes[i].tennganh, "CNTT") == 0 && s.nodes[i].gioiTinh == 'x') {
-            xuatSV(s.nodes[i]);
+        if (strcmp(s.nodes[i].theloai, "kinh di") == 0 && s.nodes[i].giatruyen < 50000) {
+            xuatTruyen(s.nodes[i]);
         }
     }
 }
 
-// Hàm tìm sinh viên theo tên
-void timSinhVienTheoTen(Stack s, int n, char ten[MAXSTACK]) {
-    cout << "\nDanh sach sinh vien co ten " << ten << ":";
+// Hàm tìm truyện theo tên
+void timTruyenTheoTen(Stack s, int n, char ten[MAXSTACK]) {
+    cout << "\tThong tin ten truyen da nhap " << ten << ":";
     for (int i = 0; i < n; i++) {
-        if (strcmp(s.nodes[i].ten, ten) == 0) {
-            xuatSV(s.nodes[i]);
-        }
+        if (strcmp(s.nodes[i].tentruyen, ten) == 0) 
+            xuatTruyen(s.nodes[i]);      
     }
 }
 
-// Hàm xuat danh sach sinh vien theo ten nganh
-void xuatDanhSachSinhVienTheoTenNganh(Stack s, int n, char tenNganh[MAXSTACK]) {
-    cout << "\nDanh sach sinh vien theo ten nganh " << tenNganh << ":";
-    for (int i = 0; i < n; i++) {
-        if (strcmp(s.nodes[i].tennganh, tenNganh) == 0) {
-            xuatSV(s.nodes[i]);
-        }
-    }
+// Hàm hoán vị
+void swap(float &a, float &b) {
+    float temp = a;
+    a = b;
+    b = temp;
 }
+
+// Hàm xóa quyển truyện theo vị trí
+void xoaTruyenTheoViTri(Stack &s, int viTri) {
+    if (viTri < 0 || viTri >= s.top + 1) {
+        cout << "\nVi tri xoa khong hop le." << endl;
+        return;
+    }
+
+    for (int i = viTri; i < s.top; i++) {
+        s.nodes[i] = s.nodes[i + 1];
+    }
+
+    s.top--;
+    cout << "\nDa xoa quyen truyen tai vi tri " << viTri + 1 << endl;
+}
+
 
 // Hàm sắp xếp danh sách sinh viên theo điểm toán tăng dần
-void sapXepSinhVienTheoDiemToan(Stack &s, int n) {
+void sapXepTruyenTheoGia(Stack &s, int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = i + 1; j < n; j++) {
-            if (s.nodes[i].diemtoan > s.nodes[j].diemtoan) {
+            if (s.nodes[i].giatruyen > s.nodes[j].giatruyen) {
                 swap(s.nodes[i], s.nodes[j]);
             }
         }
     }
 }
 
+// Hàm MENU lựa chọn
+void MeNu(int &chon) {
+    cout << "\n\tCHUONG TRINH QUAN LY KHO TRUYEN C/C++";
+    cout << "\n\t******------------MENU-------------******";
+    cout << "\n\t1. Nhap danh sach truyen";
+    cout << "\n\t2. Xuat danh sach truyen";
+    cout << "\n\t3. Tim thong tin truyen theo ma";
+    cout << "\n\t4. Xuat danh sach truyen kinh di";
+    cout << "\n\t5. Xuat danh sach truyen gia duoi 50.000 VND the loai kinh di";
+    cout << "\n\t6. Tim thong tin truyen theo ten truyen";
+    cout << "\n\t7. Xoa truyen theo vi tri nhap trong kho ";
+    cout << "\n\t8. Xuat danh sach truyen theo gia tang dan";
+    cout << "\n\t0. Thoat";
+    cout << "\n\tChon chuc nang: ";
+    cin >> chon;
+}
+
 int main() {
-    Stack stack;
-    Init(stack);
-    int chon;
-    int n = 0;
+    Stack s;
+    int n, chon;
+    char ma[MAXSTACK], ten[MAXSTACK];
+
+    Init(s);
 
     do {
         MeNu(chon);
+
         switch (chon) {
-            case 1:
-                nhapDanhSachSinhVien(stack, n);
-                break;
-            case 2:
-                xuatDanhSachSinhVien(stack, n);
-                break;
-            case 3:
-                char mssv[MAXSTACK];
-                cout << "\nNhap MSSV can tim: ";
-                fflush(stdin);
-                gets(mssv);
-                timSinhVienTheoMSSV(stack, n, mssv);
-                break;
-            case 4:
-                xuatDanhSachSinhVienCNTT(stack, n);
-                break;
-            case 5:
-                xuatDanhSachSinhVienNuCNTT(stack, n);
-                break;
-            case 6:
-                char ten[MAXSTACK];
-                cout << "\nNhap ten sinh vien can tim: ";
-                fflush(stdin);
-                gets(ten);
-                timSinhVienTheoTen(stack, n, ten);
-                break;
-            case 7:
-                char tenNganh[MAXSTACK];
-                cout << "\nNhap ten nganh can tim: ";
-                fflush(stdin);
-                gets(tenNganh);
-                xuatDanhSachSinhVienTheoTenNganh(stack, n, tenNganh);
-                break;
-            case 8:
-                sapXepSinhVienTheoDiemToan(stack, n);
-                xuatDanhSachSinhVien(stack, n);
-                break;
-            case 0:
-                cout << "\nThoat chuong trinh.";
-                break;
-            default:
-                cout << "\nLua chon khong hop le. Vui long chon lai.";
-                break;
+        case 1:
+            nhapDanhSachTruyen(s, n);
+            break;
+        case 2:
+            if (IsEmpty(s)) {
+                cout << "\nDanh sach truyen rong!" << endl;
+            } else {
+                xuatDanhSachTruyen(s, n);
+            }
+            break;
+        case 3:
+            cout << "\nNhap ma so quyen truyen can tim: ";
+            cin.ignore();
+            cin.getline(ma, sizeof(ma));
+            timTruyenTheoMa(s, n, ma);
+            break;
+        case 4:
+            xuatDanhSachTruyenKinhDi(s, n);
+            break;
+        case 5:
+            XuatTruyen5(s, n);
+            break;
+        case 6:
+            cout << "\nNhap ten truyen can tim: ";
+            cin.ignore();
+            cin.getline(ten, sizeof(ten));
+            timTruyenTheoTen(s, n, ten);
+            break;
+        case 7:
+            int viTri;
+            cout << "\nNhap vi tri truyen can xoa: ";
+            cin >> viTri;
+            xoaTruyenTheoViTri(s, viTri - 1); // Chuyển về vi tri 0-based
+            break;
+        case 8:
+            sapXepTruyenTheoGia(s, n);
+            cout << "\nDanh sach truyen sau khi sap xep theo gia tang dan:";
+            xuatDanhSachTruyen(s, n);
+            break;
+        case 0:
+            cout << "\nKet thuc chuong trinh!";
+            break;
+        default:
+            cout << "\nLua chon khong hop le. Vui long chon lai!" << endl;
+            break;
         }
     } while (chon != 0);
 
     return 0;
 }
-
-
-

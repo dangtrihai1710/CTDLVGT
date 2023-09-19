@@ -111,11 +111,15 @@ void insertFirst(PtrNode &pHead, PtrNode pNew) {
 
 // Hàm nhập danh sách sinh viên
 void nhapDanhSachSinhVien(PtrNode &pHead) {
-    int soLuong;
-    cout << "\n\tNhap so luong sinh vien: ";
-    cin >> soLuong;
+    int n;
+    do {
+        cout << "\n\tNhap so luong sinh vien (0<n<=100): ";
+        cin >> n;
+        if(0 >= n || n >= MAX)
+            cout << "\n\tSo luong sinh vien khong hop le";
+    } while (0 >= n || n >= MAX);
 
-    for (int i = 0; i < soLuong; i++) {
+    for (int i = 0; i < n; i++) {
         SV sv;
         cout << "\n\tNhap thong tin cho sinh vien thu " << i + 1 << endl;
         nhapSV(sv);
@@ -128,9 +132,9 @@ void nhapDanhSachSinhVien(PtrNode &pHead) {
 void xuatDanhSachSinhVien(PtrNode pHead) {
     PtrNode current = pHead;
     int i = 1;
-    cout << "Xuat danh sach sinh vien:\n";
+    cout << "\tXuat danh sach sinh vien:\n";
     while (current != NULL) {
-        cout << "Sinh vien thu " << i << endl;
+        cout << "\tSinh vien thu " << i << endl;
         xuatSV(current->info);
         current = current->pNext;
         i++;
@@ -227,11 +231,16 @@ void xuatSinhVienTheoTenNganh(PtrNode pHead, char tennganh[]) {
     }
 }
 
+// Hàm hoán vị
+void swap(SV &a, SV &b) {
+    SV temp = a;
+    a = b;
+    b = temp;
+}
 // Hàm sắp xếp sinh viên theo điểm toán tăng dần
 void sapXepTheoDiemToan(PtrNode& pHead) {
-    if (isEmpty(pHead)) {
+    if (isEmpty(pHead)) 
         return;
-    }
 
     PtrNode current = pHead;
     PtrNode nextNode = current->pNext;
