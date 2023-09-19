@@ -1,11 +1,24 @@
 #include <iostream>
 #include <cstring>
+#define MAX 100
 using namespace std;
 
+typedef struct Date {
+    int ngay;
+    int thang;
+    int nam;
+} Date;
+
 typedef struct SinhVien {
-    int maSV;
-    char hoTen[100];   
-}SV;
+    char ma[MAX];
+    char ten[MAX];
+    char gioiTinh;
+    float diemtoan;
+    float diemly;
+    float diemanh;
+    char tennganh[MAX];
+    Date ng;
+} SV;
 
 typedef struct tagNode {
     SV info;
@@ -14,7 +27,7 @@ typedef struct tagNode {
 
 typedef Node* PtrNode;
 
-void init(PtrNode& pHead) {
+void init(PtrNode &pHead) {
     pHead = NULL;
 }
 
@@ -22,7 +35,52 @@ bool isEmpty(PtrNode pHead) {
     return pHead == NULL;
 }
 
-// Hàm tạo node
+void nhapNgaySinh(Date &d) {
+    cout << "\n\tNhap ngay: ";
+    cin >> d.ngay;
+    cout << "\n\tNhap thang: ";
+    cin >> d.thang;
+    cout << "\n\tNhap nam: ";
+    cin >> d.nam;
+}
+
+void xuatNgaySinh(Date d) {
+    cout << d.ngay << "/" << d.thang << "/" << d.nam;
+}
+
+void nhapSV(SV &x) {
+    cout << "\n\tNhap ma: ";
+    cin >> x.ma;
+    cout << "\n\tNhap ten: ";
+    cin >> x.ten;
+    cout << "\n\tNhap ten nganh hoc: (VD:CNTT)";
+    cin >> x.tennganh;
+    cout << "\n\tNhap diem toan: ";
+    cin >> x.diemtoan;
+    cout << "\n\tNhap diem ly: ";
+    cin >> x.diemly;
+    cout << "\n\tNhap diem anh: ";
+    cin >> x.diemanh;
+    cout << "\n\tNhap ngay thang nam sinh: ";
+    nhapNgaySinh(x.ng);
+    do {
+        cout << "Nhap gioi tinh (x-nu, y-nam): ";
+        cin >> x.gioiTinh;
+    } while (x.gioiTinh != 'x' && x.gioiTinh != 'y');
+}
+
+void xuatSV(SV x) {
+    cout << "\n\tMa:" << x.ma;
+    cout << " Ten:" << x.ten;
+    cout << " Ten nganh:" << x.tennganh;
+    cout << " Diem toan:" << x.diemtoan;
+    cout << " Diem ly:" << x.diemly;
+    cout << " Diem tin:" << x.diemanh;
+    cout << " Ngay sinh: ";
+    xuatNgaySinh(x.ng);
+    cout << " Gioi tinh:" << x.gioiTinh;
+}
+
 PtrNode createNode(SV x) {
     PtrNode p = new Node;
     p->info = x;
@@ -30,18 +88,17 @@ PtrNode createNode(SV x) {
     return p;
 }
 
-
-void insertFirst(PtrNode& pHead, PtrNode pNew) {
+void insertFirst(PtrNode &pHead, PtrNode pNew) {
     if (isEmpty(pHead)) {
         pHead = pNew;
-    } else {
+    }
+    else {
         pNew->pNext = pHead;
         pHead = pNew;
     }
 }
 
-// Hàm nhập danh sách sinh viên
-void nhapDanhSachSinhVien(PtrNode& pHead) {
+void nhapDanhSachSinhVien(PtrNode &pHead) {
     int soLuong;
     cout << "Nhap so luong sinh vien: ";
     cin >> soLuong;
@@ -49,145 +106,163 @@ void nhapDanhSachSinhVien(PtrNode& pHead) {
     for (int i = 0; i < soLuong; i++) {
         SV sv;
         cout << "Nhap thong tin cho sinh vien thu " << i + 1 << endl;
-        cout << "Ma SV: ";
-        cin >> sv.maSV;
-        cout << "Ho Ten: ";
-        cin.ignore(); // Để xóa bộ nhớ đệm của cin trước khi nhập chuỗi
-        cin.getline(sv.hoTen, sizeof(sv.hoTen));
-        
+        nhapSV(sv);
         PtrNode svMoi = createNode(sv);
         insertFirst(pHead, svMoi);
     }
 }
 
-// Hàm xuất danh sách sinh viên
-void xuatDanhSachSinhVien(const PtrNode pHead) {
+void xuatDanhSachSinhVien(PtrNode pHead) {
     PtrNode current = pHead;
-    int i = 0;
+    int i = 1;
     cout << "Xuat danh sach sinh vien:\n";
     while (current != NULL) {
-        cout << "Sinh vien thu "<< i << endl;
-        cout << "Ma SV: " << current->info.maSV << ", Ho Ten: " << current->info.hoTen << endl;
+        cout << "Sinh vien thu " << i << endl;
+        xuatSV(current->info);
         current = current->pNext;
         i++;
     }
 }
 
 
-void hoanVi(SV& a, SV& b) {
-    SV temp = a;
-    a = b;
-    b = temp;
-}
 
-PtrNode searchX(PtrNode pHead, SV x) {
-    PtrNode p = pHead;
-    while (p != NULL && p->info.maSV != x.maSV) {
-        p = p->pNext;
-    }
-    return p;
-}
-
-// Hàm xóa node 
-void DeleteNode(PtrNode& pHead, PtrNode p) {
-    if (!pHead || !p) {
-        return;
-    }
-
-    // Bước 1: Nếu danh sách chỉ có 1 phần tử và đó là nút cần xóa (p == pHead)
-    if (pHead == p) {
-        pHead = pHead->pNext;
-        delete p;
-        return;
-    }
-
-    PtrNode pTruoc = NULL;
+// Hàm tìm kiếm sinh viên theo MSSV
+void timTheoMSSV(PtrNode pHead, char mssv[]) {
     PtrNode current = pHead;
+    bool found = false;
 
-    while (current != NULL && current != p) {
-        pTruoc = current;
+    while (current != NULL) {
+        if (strcmp(current->info.ma, mssv) == 0) {
+            xuatSV(current->info);
+            found = true;
+            break; // Thoát khỏi vòng lặp sau khi tìm thấy sinh viên
+        }
         current = current->pNext;
     }
 
-    // Bước 2: Kiểm tra nếu đã tìm thấy nút cần xóa (p)
-    if (current == p) {
-        pTruoc->pNext = p->pNext;
-        delete p;
+    if (!found) {
+        cout << "Khong tim thay sinh vien co MSSV nay: " << mssv << endl;
     }
 }
 
-// Hàm tìm min
-PtrNode MinMaSV(PtrNode pHead) {
-    PtrNode nodeMin = pHead;
-    PtrNode p = pHead->pNext;
-    while (p != NULL) {
-        if (nodeMin->info.maSV > p->info.maSV)
-            nodeMin = p;       
-        p = p->pNext;
-    }
-    return nodeMin;
-}
+// Hàm hiển thị sinh viên từ khoa CNTT
+void xuatSinhVienCNTT(PtrNode pHead) {
+    PtrNode current = pHead;
+    int i = 1;
 
-PtrNode MinTen(PtrNode pHead) {
-    PtrNode nodeMin = pHead;
-    PtrNode p = pHead->pNext;
-    while (p != NULL) {
-        if (strcmp(nodeMin->info.hoTen, p->info.hoTen) > 0)
-            nodeMin = p;       
-        p = p->pNext;
-    }
-    return nodeMin;
-}
-
-// Hàm sắp xếp mã sinh viên tăng dần 
-void SortMaSV(PtrNode pHead) {
-    PtrNode p = pHead;
-    while (p != NULL) {
-        PtrNode pMin = MinMaSV(p);
-        hoanVi(p->info, pMin->info);
-        p = p->pNext;
+    cout << "Danh sach sinh vien CNTT:\n";
+    while (current != NULL) {
+        if (strcmp(current->info.tennganh, "CNTT") == 0) {
+            cout << "Sinh vien thu " << i << endl;
+            xuatSV(current->info);
+            i++;
+        }
+        current = current->pNext;
     }
 }
 
-// Hàm sắp xếp tên sinh viên tăng dần 
-void SortTenSV(PtrNode pHead) {
-    PtrNode p = pHead;
-    while (p != NULL) {
-        PtrNode pMin = MinTen(p);
-        hoanVi(p->info, pMin->info);
-        p = p->pNext;
+// Hàm hiển thị sinh viên nữ từ khoa CNTT
+void xuatSinhVienNuCNTT(PtrNode pHead) {
+    PtrNode current = pHead;
+    int i = 1;
+
+    cout << "Danh sach sinh vien nu CNTT:\n";
+    while (current != NULL) {
+        if (strcmp(current->info.tennganh, "CNTT") == 0 && current->info.gioiTinh == 'x') {
+            cout << "Sinh vien nu CNTT thu " << i << endl;
+            xuatSV(current->info);
+            i++;
+        }
+        current = current->pNext;
     }
 }
 
-// Hàm menu
+// Hàm tìm kiếm sinh viên theo tên
+void timTheoTen(PtrNode pHead, char ten[]) {
+    PtrNode current = pHead;
+    int i = 1;
+    bool found = false;
+
+    while (current != NULL) {
+        if (strcmp(current->info.ten, ten) == 0) {
+            cout << "Sinh vien co ten '" << ten << "' thu " << i << endl;
+            xuatSV(current->info);
+            found = true;
+        }
+        current = current->pNext;
+        i++;
+    }
+
+    if (!found) {
+        cout << "Khong tim thay sinh vien co ten nay: " << ten << endl;
+    }
+}
+
+// Hàm hiển thị sinh viên theo tên ngành
+void xuatSinhVienTheoTenNganh(PtrNode pHead, char tennganh[]) {
+    PtrNode current = pHead;
+    int i = 1;
+
+    cout << "Danh sach sinh vien theo nganh '" << tennganh << "':\n";
+    while (current != NULL) {
+        if (strcmp(current->info.tennganh, tennganh) == 0) {
+            cout << "Sinh vien thu " << i << endl;
+            xuatSV(current->info);
+            i++;
+        }
+        current = current->pNext;
+    }
+}
+
+// Hàm sắp xếp sinh viên theo điểm toán tăng dần
+void sapXepTheoDiemToan(PtrNode& pHead) {
+    if (isEmpty(pHead)) {
+        return;
+    }
+
+    PtrNode current = pHead;
+    PtrNode nextNode = current->pNext;
+
+    while (current != NULL) {
+        while (nextNode != NULL) {
+            if (current->info.diemtoan > nextNode->info.diemtoan) {
+                swap(current->info, nextNode->info);
+            }
+            nextNode = nextNode->pNext;
+        }
+        current = current->pNext;
+        if (current != NULL) {
+            nextNode = current->pNext;
+        }
+    }
+}
+
+// Hàm MENU lựa chọn
 void MeNu(int &chon) {
-        cout << "CHUONG TRINH QUAN LY SINH VIEN DANH SACH LIEN KET C/C++\n";
-        cout << "*************************MENU**************************\n";
-        cout << "**  1. Them danh sach sinh vien.                     **\n";
-        cout << "**  2. In danh sach sinh vien.                       **\n";
-        cout << "**  3. Xoa sinh vien boi ID.                         **\n";
-        cout << "**  4. Sap xep ma SV tang dan.                       **\n";
-        cout << "**  5. Sap xep ten SV tang dan.                      **\n";
-        cout << "**  6. Thoat.                                        **\n";
-        // cout << "**  7. Hien thi danh sach sinh vien.                 **\n";
-        // cout << "**  8. Ghi danh sach sinh vien vao file.             **\n";
-        // cout << "**  0. Thoat                                         **\n";
-        cout << "*******************************************************\n";
-        cout << "Nhap lua chon: ";
-        cin >> chon;
+    cout << "\n\tCHUONG TRINH QUAN LY SINH VIEN BANG C/C++";
+    cout << "\n\t******------------MENU-------------******";
+    cout << "\n\t1. Nhap danh sach sinh vien";
+    cout << "\n\t2. Xuat danh sach sinh vien";
+    cout << "\n\t3. Tim thong tin sinh vien theo MSSV";
+    cout << "\n\t4. Xuat danh sach sinh vien CNTT";
+    cout << "\n\t5. Xuat danh sach sinh vien nu CNTT";
+    cout << "\n\t6. Tim thong tin sinh vien theo ten";
+    cout << "\n\t7. Xuat danh sach sinh vien theo ten nganh";
+    cout << "\n\t8. Xuat danh sach sinh vien theo diem toan tang dan";
+    cout << "\n\t0. Thoat";
+    cout << "\n\tChon chuc nang: ";
+    cin >> chon;
 }
-
-
-
 
 int main() {
-    PtrNode pHead = NULL;
-    PtrNode svCanXoa; 
-    int chon;
+    PtrNode pHead;
+    init(pHead);
 
+    int choice;
     do {
-        MeNu(chon);
-        switch(chon) {
+        MeNu(choice); // Hiển thị menu và lấy sự lựa chọn của người dùng
+
+        switch (choice) {
             case 1:
                 nhapDanhSachSinhVien(pHead);
                 break;
@@ -195,40 +270,44 @@ int main() {
                 xuatDanhSachSinhVien(pHead);
                 break;
             case 3:
-                int maSVCanXoa;
-                cout << "Nhap ma SV can xoa: ";
-                cin >> maSVCanXoa;
-                svCanXoa = searchX(pHead, SinhVien{maSVCanXoa, ""});
-                if (svCanXoa != NULL) {
-                    DeleteNode(pHead, svCanXoa);
-                    cout << "Da xoa sinh vien co ma SV " << maSVCanXoa << endl;
-                } else {
-                    cout << "Khong tim thay sinh vien co ma SV " << maSVCanXoa << endl;
-                }
+                char mssv[MAX];
+                cout << "Nhap MSSV can tim: ";
+                cin >> mssv;
+                timTheoMSSV(pHead, mssv);
                 break;
             case 4:
-                SortMaSV(pHead);
-                cout << "Danh sach sau khi sap xep theo ma SV:" << endl;
-                xuatDanhSachSinhVien(pHead);
+                xuatSinhVienCNTT(pHead);
                 break;
             case 5:
-                SortTenSV(pHead);
-                cout << "Danh sach sau khi sap xep theo ten SV:" << endl;
-                xuatDanhSachSinhVien(pHead);
+                xuatSinhVienNuCNTT(pHead);
                 break;
             case 6:
-                // Giải phóng bộ nhớ
-                while (pHead != nullptr) {
-                    PtrNode sv = pHead;
-                    pHead = pHead->pNext;
-                    delete sv;
-                }
+                char ten[MAX];
+                cout << "Nhap ten SV can tim: ";
+                cin.ignore();
+                cin.getline(ten, sizeof(ten));
+                timTheoTen(pHead, ten);
+                break;
+            case 7:
+                char tennganh[MAX];
+                cout << "Nhap ten nganh can tim SV: ";
+                cin.ignore();
+                cin.getline(tennganh, sizeof(tennganh));
+                xuatSinhVienTheoTenNganh(pHead, tennganh);
+                break;
+            case 8:
+                sapXepTheoDiemToan(pHead);
+                cout << "Danh sach sinh vien co diem toan tang dan:\n";
+                xuatDanhSachSinhVien(pHead);
+                break;
+            case 0:
+                cout << "Thoat chuong trinh quan ly sinh vien.\n";
                 break;
             default:
-                cout << "Lua chon khong hop le" << endl;
+                cout << "Lua chon khon hop le .Vui long chon lai.\n";
                 break;
         }
-    } while (chon != 6);
+    } while (choice != 0);
 
     return 0;
 }
