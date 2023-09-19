@@ -112,7 +112,7 @@ void xuatDanhSachTruyen(Stack s, int n) {
     }
 }
 
-// Hàm tìm truyện theo Mã
+// Hàm tìm truyện theo mã
 void timTruyenTheoMa(Stack s, int n, char mssv[MAXSTACK]) {
     for (int i = 0; i < n; i++) {
         if (strcmp(s.nodes[i].ma, mssv) == 0) {
@@ -121,12 +121,12 @@ void timTruyenTheoMa(Stack s, int n, char mssv[MAXSTACK]) {
             return;
         }
     }
-    cout << "\nKhong tim thay truyen co ma nay " << mssv;
+    cout << "\n\tKhong tim thay truyen co ma nay " << mssv;
 }
 
 // Hàm xuat danh sach truyện thể loại kinh dị
 void xuatDanhSachTruyenKinhDi(Stack s, int n) {
-    cout << "\nDanh sach truyen kinh di:";
+    cout << "\n\tDanh sach truyen kinh di:";
     for (int i = 0; i < n; i++) {
         if (strcmp(s.nodes[i].theloai, "kinh di") == 0) {
             xuatTruyen(s.nodes[i]);
@@ -136,7 +136,7 @@ void xuatDanhSachTruyenKinhDi(Stack s, int n) {
 
 // Hàm xuất danh sách truyện giá dưới 50.000 VND thể loại kinh dị
 void XuatTruyen5(Stack s, int n) {
-    cout << "\nDanh sach truyen the loai kinh di:";
+    cout << "\n\tDanh sach truyen the loai kinh di:";
     for (int i = 0; i < n; i++) {
         if (strcmp(s.nodes[i].theloai, "kinh di") == 0 && s.nodes[i].giatruyen < 50000) {
             xuatTruyen(s.nodes[i]);
@@ -163,7 +163,7 @@ void swap(float &a, float &b) {
 // Hàm xóa quyển truyện theo vị trí
 void xoaTruyenTheoViTri(Stack &s, int viTri) {
     if (viTri < 0 || viTri >= s.top + 1) {
-        cout << "\nVi tri xoa khong hop le." << endl;
+        cout << "\n\tVi tri xoa khong hop le." << endl;
         return;
     }
 
@@ -172,7 +172,7 @@ void xoaTruyenTheoViTri(Stack &s, int viTri) {
     }
 
     s.top--;
-    cout << "\nDa xoa quyen truyen tai vi tri " << viTri + 1 << endl;
+    cout << "\n\tDa xoa quyen truyen tai vi tri " << viTri + 1 << endl;
 }
 
 
