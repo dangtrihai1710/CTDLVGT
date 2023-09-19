@@ -2,13 +2,15 @@
 #include <cstring>
 #define MAX 100
 using namespace std;
-// Định nghĩa ngày tháng năm
+
+// Định nghĩa kiểu dữ liệu ngày tháng
 typedef struct Date {
     int ngay;
     int thang;
     int nam;
 } Date;
-//  Định nghĩa SV
+
+// Định nghĩa kiểu dữ liệu cấu trúc sinh viên
 typedef struct SinhVien {
     char ma[MAX];
     char ten[MAX];
