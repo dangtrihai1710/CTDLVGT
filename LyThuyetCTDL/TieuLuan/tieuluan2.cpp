@@ -64,7 +64,7 @@ void nhapSV(SV &x) {
     cout << "\n\tNhap ngay thang nam sinh: ";
     nhapNgaySinh(x.ng);
     do {
-        cout << "Nhap gioi tinh (x-nu, y-nam): ";
+        cout << "\n\tNhap gioi tinh (x-nu, y-nam): ";
         cin >> x.gioiTinh;
     } while (x.gioiTinh != 'x' && x.gioiTinh != 'y');
 }
@@ -100,12 +100,12 @@ void insertFirst(PtrNode &pHead, PtrNode pNew) {
 
 void nhapDanhSachSinhVien(PtrNode &pHead) {
     int soLuong;
-    cout << "Nhap so luong sinh vien: ";
+    cout << "\n\tNhap so luong sinh vien: ";
     cin >> soLuong;
 
     for (int i = 0; i < soLuong; i++) {
         SV sv;
-        cout << "Nhap thong tin cho sinh vien thu " << i + 1 << endl;
+        cout << "\n\tNhap thong tin cho sinh vien thu " << i + 1 << endl;
         nhapSV(sv);
         PtrNode svMoi = createNode(sv);
         insertFirst(pHead, svMoi);
