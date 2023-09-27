@@ -9,15 +9,18 @@ typedef struct node {
 
 typedef Node* PtrNode;
 
+// Hàm khởi tạo cây
 void Init(PtrNode &proot) {
     proot = NULL;
 }
 
+// Hàm kiểm tra rỗng
 bool isEmpty (PtrNode proot) {
     if(proot == NULL)   return true;
     return false;
 }
 
+// Hàm tạo node x
 PtrNode CreateNode(int x) {
     PtrNode p = new Node;
     p->info = x;
@@ -26,6 +29,7 @@ PtrNode CreateNode(int x) {
     return p;
 }
 
+// Hàm tạo cây nhị phân từ mảng số nguyên
 void CreateTree(PtrNode &proot, int a[], int begin, int end) {
     if(begin > end) return;
     int i = (begin + end) / 2;
@@ -35,6 +39,7 @@ void CreateTree(PtrNode &proot, int a[], int begin, int end) {
     CreateTree(proot->left, a, begin, i-1);
 }
 
+// Hàm duyệt NLR
 void NLR(PtrNode proot) {
     if(proot != NULL) {
         printf("%4d",proot -> info); // Xuat gia tri nut goc
@@ -43,6 +48,7 @@ void NLR(PtrNode proot) {
     }
 }
 
+// Hàm thêm cây
 void Insert(PtrNode &proot, int x) {
     if(isEmpty(proot)) // nếu cây rỗng, thêm trực tiếp vào cây
         proot = CreateNode(x);
@@ -56,7 +62,7 @@ void Insert(PtrNode &proot, int x) {
     }
 }
 
-
+// Hàm xóa cây
 int Remove(PtrNode &proot, int x) {
     if(proot == NULL)
         return false; // không tìm thấy nút cần xóa
@@ -92,6 +98,7 @@ int Remove(PtrNode &proot, int x) {
 
 }
 
+// Hàm giải phóng bộ nhớ cây
 void FreeTree(PtrNode &proot) {
     if (proot != NULL) {
         FreeTree(proot->left); // Giải phóng cây con trái
@@ -100,9 +107,6 @@ void FreeTree(PtrNode &proot) {
         proot = NULL; // Đặt con trỏ gốc thành NULL để tránh truy cập sau khi giải phóng
     }
 }
-
-
-// Các phần khai báo và định nghĩa cấu trúc Node và các hàm đã được đưa ra ở trên.
 
 int main() {
     PtrNode root = NULL; // Khởi tạo cây rỗng
