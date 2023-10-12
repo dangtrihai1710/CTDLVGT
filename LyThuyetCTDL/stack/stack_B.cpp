@@ -20,6 +20,8 @@ bool IsEmpty(Stack s) {
     return (s == NULL);
 }
 
+
+
 int Push(Stack &s, int x)  {
     PtrNode p = new Node;
     if(IsEmpty(p)) return 0;
@@ -36,6 +38,15 @@ int Pop(Stack &s, int &x) {
     s=s->pNext;
     delete p;
     return 1;
+}
+
+
+void showStack(Stack s) {
+    PtrNode current = s;
+    while(current != NULL) {
+        cout << current -> info ;
+        current = current->pNext;
+    }
 }
 
 int CopyStack(PtrNode s, PtrNode &dest) {
@@ -81,11 +92,8 @@ int main() {
 
     if (CopyStack(sourceStack, destinationStack)) {
         // In ra các phần tử từ stack đích (destinationStack)
-        PtrNode temp = destinationStack;
-        while (temp != NULL) {
-            cout << temp->info << " ";
-            temp = temp->pNext;
-        }
+        showStack(destinationStack);
+        
         // Giải phóng bộ nhớ của stack đích nếu cần
         while (destinationStack != NULL) {
             PtrNode temp = destinationStack;

@@ -64,38 +64,53 @@ void Insert(PtrNode &proot, int x) {
 
 // Hàm xóa cây
 int Remove(PtrNode &proot, int x) {
-    if(proot == NULL)
-        return false; // không tìm thấy nút cần xóa
-    if(proot->info > x) // tìm và xóa bên trái
-        return Remove(proot->left, x);
-    if(proot->info < x) // tìm và xóa bên phải
-        return Remove(proot->right, x);
-    // nếu (proot->info == x)
-    PtrNode p,f,rp;
-    p = proot; //p biến tạm trỏ đến proot
-    // trường hợp proot có 1 cây con
-    if(proot->left == NULL) // có 1 cây con
-        proot = proot->right;
-    else if (proot->right == NULL) // có 1 cây con
-        proot = proot->left;
-    else {
-        //TH pTree có 2 cây con chọn nút nhỏ nhất bên cây con phải
-        f = p; // f để lưu cha của rp
-        rp = rp->right; //rp qua bên p->right
-        while(rp->left != NULL) {
-            f = rp; // lưu cha của rp
-            rp = rp->left; //rp qua bên trái
-        } //kết thúc khi rp là nút có nút con trái là NULL
-        p->info = rp->info; // đổi giá trtị của p và rp
-        if(f == p) // nếu cha của rp là p
-            f->right = rp->right;
-        else //f != p
-            f->left = rp->right;
-        p = rp; // ptrỏ đến phần tử thế mạng rp
-    }
-    delete p; // xóa nút p
-    return true;
+    if (proot == NULL)
+        return false; // Không tìm thấy nút cần xóa
 
+    if (proot->info > x) {
+        // Tìm và xóa bên trái
+        if (Remove(proot->left, x)) {
+            // Xóa thành công nút ở phía bên trái
+            // Kiểm tra xem có cần cân bằng lại cây không
+            // (bạn có thể thêm cân bằng cây ở đây nếu cần)
+            return true;
+        }
+    } else if (proot->info < x) {
+        // Tìm và xóa bên phải
+        if (Remove(proot->right, x)) {
+            // Xóa thành công nút ở phía bên phải
+            // Kiểm tra xem có cần cân bằng lại cây không
+            // (bạn có thể thêm cân bằng cây ở đây nếu cần)
+            return true;
+        }
+    }         // Nếu proot->info == x 
+    else {     
+        // Xử lý trường hợp có ít hơn hai cây con
+        if (proot->left == NULL) {
+            proot = proot->right;
+        } else if (proot->right == NULL) {
+            proot = proot->left;
+        } else {
+            // Xử lý trường hợp có cả hai cây con
+            // Tìm nút kế tiếp lớn hơn trong cây con bên phải
+            PtrNode successor = proot->right;
+            while (successor->left != NULL) {
+                successor = successor->left;
+            }
+
+            // Copy giá trị của nút kế tiếp vào nút hiện tại
+            proot->info = successor->info;
+
+            // Xóa nút kế tiếp
+            Remove(successor, successor->info);
+        }
+
+        // Xóa nút tạm thời
+        delete proot;
+        return true;
+    }
+
+    return false; // Không tìm thấy nút cần xóa
 }
 
 // Hàm giải phóng bộ nhớ cây
